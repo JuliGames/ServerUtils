@@ -8,6 +8,9 @@ commands:
   express:
     description: Request or accept support
     usage: /express <support/claimsupport> [Player]
+  resetnethervote:
+    description: Vote for resetting the Nether
+    usage: /resetnethervote
 
 permissions:
   juligames.*:
@@ -16,6 +19,7 @@ permissions:
   juligames.serverutils.*:
     children:
       juligames.serverutils.express.*: true
+      juligames.serverutils.vote.*: true
   juligames.serverutils.express.*:
     children:
       juligames.serverutils.express.support.*: true
@@ -27,3 +31,19 @@ permissions:
     default: op
   juligames.serverutils.express.support.request:
     default: not op
+  juligames.serverutils.vote.*:
+    children:
+      juligames.serverutils.vote.nether: true
+      juligames.serverutils.vote.end: true
+  juligames.serverutils.vote.nether:
+    default: not op
+  juligames.serverutils.vote.end:
+    default: not op
+  juligames.serverutils.force.*:
+    children:
+      juligames.serverutils.vote.nether.force: true
+      juligames.serverutils.vote.end.force: true
+  juligames.serverutils.vote.nether.force:
+    default: op
+  juligames.serverutils.vote.end.force:
+    default: op
