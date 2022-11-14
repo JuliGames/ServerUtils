@@ -1,0 +1,29 @@
+name: ServerUtils
+main: net.juligames.serverutils.main.ServerUtils
+version: 0.1
+description: ServerUtils for Juligames
+api-version: 1.18
+author: Bommels05
+commands:
+  express:
+    description: Request or accept support
+    usage: /express <support/claimsupport> [Player]
+
+permissions:
+  juligames.*:
+    children:
+      juligames.serverutils.*: true
+  juligames.serverutils.*:
+    children:
+      juligames.serverutils.express.*: true
+  juligames.serverutils.express.*:
+    children:
+      juligames.serverutils.express.support.*: true
+  juligames.serverutils.express.support.*:
+    children:
+      juligames.serverutils.express.support.request: true
+      juligames.serverutils.express.support.accept: true
+  juligames.serverutils.express.support.accept:
+    default: op
+  juligames.serverutils.express.support.request:
+    default: not op
