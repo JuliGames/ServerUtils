@@ -15,7 +15,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class ResetNetherVoteCommand implements CommandExecutor {
+public class ResetEndVoteCommand implements CommandExecutor {
     Storage storage = ServerUtils.getStorage();
 
     @Override
@@ -24,30 +24,30 @@ public class ResetNetherVoteCommand implements CommandExecutor {
             Player player = ((Player) sender);
             if (Bukkit.getServer().getPluginManager().isPluginEnabled("Multiverse-Core")) {
                 if (args.length == 0) {
-                    if (player.hasPermission(ServerUtils.NETHER_VOTE)) {
-                        if (!storage.getNetherVotes().contains(player.getUniqueId())) {
-                            storage.addNetherVote(player.getUniqueId());
-                            ServerUtils.sendMessage("<green>You have successfully voted for a reset of the Nether!</green> <yellow>" + storage.getNetherVoteCount() + "/10</yellow>", player);
-                            if (storage.getNetherVoteCount() >= 10) {
-                                resetNether();
+                    if (player.hasPermission(ServerUtils.END_VOTE)) {
+                        if (!storage.getEndVotes().contains(player.getUniqueId())) {
+                            storage.addEndVote(player.getUniqueId());
+                            ServerUtils.sendMessage("<green>You have successfully voted for a reset of the End!</green> <yellow>" + storage.getEndVoteCount() + "/10</yellow>", player);
+                            if (storage.getEndVoteCount() >= 10) {
+                                resetEnd();
                             }
                         } else {
-                            ServerUtils.sendMessage("<red>You have already voted for a reset of the Nether!</red> <yellow>" + storage.getNetherVoteCount() + "/10</yellow>", player);
+                            ServerUtils.sendMessage("<red>You have already voted for a reset of the End!</red> <yellow>" + storage.getEndVoteCount() + "/10</yellow>", player);
                         }
                     } else {
                         ServerUtils.sendMessage("<red>You don´t have the permissions to execute this Command!</red>", player);
                     }
                 } else {
-                    if (player.hasPermission(ServerUtils.NETHER_VOTE_FORCE)) {
+                    if (player.hasPermission(ServerUtils.END_VOTE_FORCE)) {
                         if (args[0].equalsIgnoreCase("force")) {
                             if (args.length == 2 && args[1].equalsIgnoreCase("confirm")) {
-                                resetNether();
+                                resetEnd();
                                 return true;
                             } else {
-                                ServerUtils.sendMessage("<green>Are you sure you want to reset the Nether? </green><dark_green><click:run_command:'/resetnethervote force confirm'>[confirm]</click></dark_green>", player);
+                                ServerUtils.sendMessage("<green>Are you sure you want to reset the End? </green><dark_green><click:run_command:'/resetendvote force confirm'>[confirm]</click></dark_green>", player);
                             }
                         } else {
-                            ServerUtils.sendMessage("<red>Use /resetnethervote [force]", player);
+                            ServerUtils.sendMessage("<red>Use /resetendvote [force]", player);
                         }
                     } else {
                         ServerUtils.sendMessage("<red>You don´t have the permissions to execute this Command!</red>", player);
@@ -62,16 +62,16 @@ public class ResetNetherVoteCommand implements CommandExecutor {
         return true;
     }
 
-    private void resetNether() {
-        Bukkit.getServer().broadcast(MiniMessage.miniMessage().deserialize("\n<yellow>Resetting Nether</yellow>\n"), Server.BROADCAST_CHANNEL_USERS);
-        storage.resetNetherVotes();
+    private void resetEnd() {
+        Bukkit.getServer().broadcast(MiniMessage.miniMessage().deserialize("\n<yellow>Resetting End</yellow>\n"), Server.BROADCAST_CHANNEL_USERS);
+        storage.resetEndVotes();
 
         MultiverseCore core = (MultiverseCore) Bukkit.getServer().getPluginManager().getPlugin("Multiverse-Core");
         MVWorldManager mv = core.getMVWorldManager();
-        mv.deleteWorld("world_nether");
-        mv.addWorld("world_nether", World.Environment.NETHER, null, WorldType.NORMAL, true, null);
+        mv.deleteWorld("world_the_end");
+        mv.addWorld("world_the_end", World.Environment.THE_END, null, WorldType.NORMAL, true, null);
 
-        Bukkit.getServer().broadcast(MiniMessage.miniMessage().deserialize("\n<yellow>Resetted Nether</yellow>\n"), Server.BROADCAST_CHANNEL_USERS);
+        Bukkit.getServer().broadcast(MiniMessage.miniMessage().deserialize("\n<yellow>Resetted End</yellow>\n"), Server.BROADCAST_CHANNEL_USERS);
     }
 
 }

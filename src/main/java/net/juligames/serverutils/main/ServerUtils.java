@@ -1,6 +1,8 @@
 package net.juligames.serverutils.main;
 
 import net.juligames.serverutils.commands.ExpressCommand;
+import net.juligames.serverutils.commands.PrefixCommand;
+import net.juligames.serverutils.commands.ResetEndVoteCommand;
 import net.juligames.serverutils.commands.ResetNetherVoteCommand;
 import net.juligames.serverutils.storage.Storage;
 import net.juligames.serverutils.storage.StoragelessStorage;
@@ -14,14 +16,15 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ServerUtils extends JavaPlugin {
-    public static final Permission support_accept = new Permission("juligames.serverutils.express.support.accept");
-    public static final Permission support_request = new Permission("juligames.serverutils.express.support.request");
-    public static final Permission nether_vote = new Permission("juligames.serverutils.vote.nether");
-    public static final Permission end_vote = new Permission("juligames.serverutils.vote.end");
-    public static final Permission nether_vote_force = new Permission("juligames.serverutils.vote.nether.force");
-    public static final Permission end_vote_force = new Permission("juligames.serverutils.vote.end.force");
+    public static final Permission SUPPORT_ACCEPT = new Permission("juligames.serverutils.express.support.accept");
+    public static final Permission SUPPORT_REQUEST = new Permission("juligames.serverutils.express.support.request");
+    public static final Permission NETHER_VOTE = new Permission("juligames.serverutils.vote.nether");
+    public static final Permission END_VOTE = new Permission("juligames.serverutils.vote.end");
+    public static final Permission NETHER_VOTE_FORCE = new Permission("juligames.serverutils.vote.nether.force");
+    public static final Permission END_VOTE_FORCE = new Permission("juligames.serverutils.vote.end.force");
+    public static final Permission CHANGE_PREFIX = new Permission("juligames.serverutils.prefix");
 
-    public static final String prefix = "[Juligames] ";
+    public static final String PREFIX = "[Juligames] ";
 
     public static Storage storage;
 
@@ -32,6 +35,8 @@ public class ServerUtils extends JavaPlugin {
 
         registerCommand(new ExpressCommand(), "express");
         registerCommand(new ResetNetherVoteCommand(), "resetnethervote");
+        registerCommand(new ResetEndVoteCommand(), "resetendvote");
+        registerCommand(new PrefixCommand(), "prefix");
 
         Bukkit.getLogger().info("Enabled ServerUtils V" + getDescription().getVersion());
     }
@@ -50,15 +55,15 @@ public class ServerUtils extends JavaPlugin {
     }
 
     public static void sendMessage(String kennyTV, CommandSender sender) {
-        sender.sendMessage(MiniMessage.miniMessage().deserialize(prefix + kennyTV));
+        sender.sendMessage(MiniMessage.miniMessage().deserialize(PREFIX + kennyTV));
     }
 
     public static void sendBroadcast(String kennyTV) {
-        Bukkit.getServer().broadcast(MiniMessage.miniMessage().deserialize(prefix + kennyTV), Server.BROADCAST_CHANNEL_USERS);
+        Bukkit.getServer().broadcast(MiniMessage.miniMessage().deserialize(PREFIX + kennyTV), Server.BROADCAST_CHANNEL_USERS);
     }
 
     public static void sendBroadcast(String kennyTV, Permission permission) {
-        Bukkit.broadcast(MiniMessage.miniMessage().deserialize(prefix + kennyTV), permission.getName());
+        Bukkit.broadcast(MiniMessage.miniMessage().deserialize(PREFIX + kennyTV), permission.getName());
     }
 
 }

@@ -23,15 +23,15 @@ public class ExpressCommand implements CommandExecutor {
             Player player = ((Player) sender);
             if (args.length > 0) {
                 if (args[0].equalsIgnoreCase("support")) {
-                    if (player.hasPermission(ServerUtils.support_request)) {
-                        if (Bukkit.getOnlinePlayers().stream().anyMatch(player1 -> player1.hasPermission(ServerUtils.support_accept))) {
+                    if (player.hasPermission(ServerUtils.SUPPORT_REQUEST)) {
+                        if (Bukkit.getOnlinePlayers().stream().anyMatch(player1 -> player1.hasPermission(ServerUtils.SUPPORT_ACCEPT))) {
                             ServerUtils.sendMessage("<green>You successfully requested the Express Support!</green>", player);
 
                             storage.addToTicketHistory(System.currentTimeMillis(), player.getUniqueId());
                             if (!storage.getOpenTickets().contains(player)) {
                                 storage.addOpenTicket(player);
                             }
-                            ServerUtils.sendBroadcast("<green>" + MiniMessage.miniMessage().serialize(player.displayName()) + " is asking for Express-Support</green> <dark_green><click:run_command:'/express claimsupport " + player.getName() + "'>[Accept]</click></dark_green>", ServerUtils.support_accept);
+                            ServerUtils.sendBroadcast("<green>" + MiniMessage.miniMessage().serialize(player.displayName()) + " is asking for Express-Support</green> <dark_green><click:run_command:'/express claimsupport " + player.getName() + "'>[Accept]</click></dark_green>", ServerUtils.SUPPORT_ACCEPT);
                         } else {
                             ServerUtils.sendMessage("<red>There are currently no Team Members online!</red> <green>You can try to ask for help in the Discord!</green>", player);
                         }
@@ -41,7 +41,7 @@ public class ExpressCommand implements CommandExecutor {
                     return true;
                 }
                 if (args[0].equalsIgnoreCase("claimsupport")) {
-                    if (player.hasPermission(ServerUtils.support_accept)) {
+                    if (player.hasPermission(ServerUtils.SUPPORT_ACCEPT)) {
                         if (args.length == 2) {
                             if (Bukkit.getPlayer(args[1]) != null) {
                                 Player target = Bukkit.getPlayer(args[1]);
@@ -49,6 +49,11 @@ public class ExpressCommand implements CommandExecutor {
                                     storage.removeOpenTicket(target);
                                     ServerUtils.sendMessage("<green>" + MiniMessage.miniMessage().serialize(player.displayName()) + " will message you as soon as possible!</green>", target);
                                     ServerUtils.sendMessage("<green>You accepted the case of " + MiniMessage.miniMessage().serialize(target.displayName()) + "</green>", player);
+                                    for (Player player2 : Bukkit.getOnlinePlayers()) {
+                                        if (player2.hasPermission(ServerUtils.SUPPORT_ACCEPT) && player2 != player) {
+                                            ServerUtils.sendMessage("<green>" + MiniMessage.miniMessage().serialize(player.displayName()) + " accepted the case of " + MiniMessage.miniMessage().serialize(target.displayName()) + "</green>", player2);
+                                        }
+                                    }
                                 } else {
                                     ServerUtils.sendMessage("<red>" + MiniMessage.miniMessage().serialize(target.displayName()) + " has no open ticket!</red>", player);
                                 }

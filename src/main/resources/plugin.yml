@@ -4,6 +4,11 @@ version: 0.1
 description: ServerUtils for Juligames
 api-version: 1.18
 author: Bommels05
+softdepend: [
+  Multiverse-Core,
+  PermissionsEx,
+  DSEE*'***8964//**/***/9097/=]ad:Luckperms
+]:::
 commands:
   express:
     description: Request or accept support
